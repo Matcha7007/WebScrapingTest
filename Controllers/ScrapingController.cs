@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
+﻿using Microsoft.AspNetCore.Mvc;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
-using WebScrapingTest;
 
 namespace TestWebAPi.Controllers
 {
@@ -19,6 +16,7 @@ namespace TestWebAPi.Controllers
 			driver.Navigate().GoToUrl(url);
 			try
 			{
+				Thread.Sleep(2000);
 				String itemName = driver.FindElement(By.XPath("//h1[@data-testid='lblPDPDetailProductName']")).Text;
 				String itemPrice = driver.FindElement(By.XPath("//div[@data-testid='lblPDPDetailProductPrice']")).Text;
 				String itemDescription = driver.FindElement(By.XPath("//div[@data-testid='lblPDPDescriptionProduk']")).Text;
