@@ -16,7 +16,7 @@ namespace TestWebAPi.Controllers
 			driver.Navigate().GoToUrl(url);
 			try
 			{
-				Thread.Sleep(2000);
+				Thread.Sleep(4000);
 				String itemName = driver.FindElement(By.XPath("//h1[@data-testid='lblPDPDetailProductName']")).Text;
 				String itemPrice = driver.FindElement(By.XPath("//div[@data-testid='lblPDPDetailProductPrice']")).Text;
 				String itemDescription = driver.FindElement(By.XPath("//div[@data-testid='lblPDPDescriptionProduk']")).Text;
@@ -31,7 +31,7 @@ namespace TestWebAPi.Controllers
 				return Enumerable.Range(1, 1).Select(index => new Scraping
 				{
 					ItemName = itemName,
-					ItemPrice = itemPrice,
+					ItemPrice = Convert.ToInt32(itemPrice.Replace("Rp","").Replace(".","")),
 					ItemDescription = itemDescription,
 					ItemVendor = itemVendor
 				}).ToArray();
