@@ -1,10 +1,11 @@
+using WebScrapingTest;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //Add services to the container.
-builder.Services.AddCors(p => p.AddPolicy("CorsPolicy", builder =>
-{
-	builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-}));
+builder.Services.AddCors(p => p.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
+builder.Services.AddSingleton<IScraping, Scraping>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
