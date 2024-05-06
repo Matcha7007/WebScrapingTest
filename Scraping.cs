@@ -1,5 +1,5 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+using System.Drawing;
 
 using TestWebAPi;
 
@@ -13,9 +13,13 @@ namespace WebScrapingTest
 	{
 		public ScrapingDto Scrap(string url, IWebDriver driver)
 		{
-			driver.Manage().Window.Maximize();
+			driver.Manage().Window.Size = new System.Drawing.Size(450, 600);
+			driver.Manage().Window.Position = new Point(-450, -600);
+
 			driver.Navigate().GoToUrl(url);
 			Thread.Sleep(4000);
+			IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+			js.ExecuteScript("window.scrollTo(0, document.body.scrollHeight)");
 
 			String itemName = driver.FindElement(By.XPath("//h1[@data-testid='lblPDPDetailProductName']")).Text;
 			String itemPrice = driver.FindElement(By.XPath("//div[@data-testid='lblPDPDetailProductPrice']")).Text;
