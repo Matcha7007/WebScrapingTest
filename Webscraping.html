@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function isValidUrl(url) {
+            // Regex untuk memeriksa URL yang valid
+            const urlPattern = /^(ftp|http|https):\/\/[^ "]+$/;
+
+            // Mengembalikan true jika URL sesuai dengan pola regex, dan false jika tidak
+            return urlPattern.test(url);
+        }
+
+        async function onInputChangeUrl(e) {
+            const id = e.id.split("_")[1];
+            if (!e.value) return
+            if (!isValidUrl(e.value)) return
+            try {
+                const response = await fetch(`https://localhost:7117/api/Scraping?url=${e.value}`, {
+                    method: "POST",
+                    mode: "cors",
+                    cache: "no-cache",
+                    // credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                });
+                const data = await response.json();
+                const newData = data;
+                console.log(newData);
+                document.getElementById("itemname_" + id).value = newData.itemName
+                document.getElementById("vendor_" + id).value = newData.itemVendor
+                document.getElementById("price_" + id).value = newData.itemPrice
+                document.getElementById("subtotal_" + id).innerHTML = newData.itemPrice * document.getElementById("qty_" + id).value || 0
+                document.getElementById("description_" + id).value = newData.itemDescription
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        function onInputChangeQty(e) {
+            const id = e.id.split("_")[1];
+            document.getElementById("subtotal_" + id).innerHTML = (document.getElementById("price_" + id).value * document.getElementById("qty_" + id).value || 0).toLocaleString("in-ID")
+        }
+    </script>
+</head>
+
+<body>
+    <div class="mx-4  my-2">
+        <p class="text-2xl font-bold mb-2">Web Scraping</p>
+
+        <div class="border border-gray-300 p-4 rounded-md">
+            <div class="relative overflow-x-auto">
+                <table class="w-full">
+                    <thead class="text-xs text-black uppercase bg-gray-200">
+                        <tr>
+                            <th scope="col" class="px-2 py-3">
+                                URL
+                            </th>
+                            <th scope="col" class="px-2 py-3">
+                                Item Name
+                            </th>
+                            <th scope="col" class="px-2 py-3">
+                                Vendor Name
+                            </th>
+                            <th scope="col" class="px-2 py-3 text-right">
+                                Qty
+                            </th>
+                            <th scope="col" class="px-2 py-3 text-right">
+                                Price
+                            </th>
+                            <th scope="col" class="px-2 py-3 text-right">
+                                Subtotal
+                            </th>
+                            <th scope="col" class="px-2 py-3">
+                                Description
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white border-b">
+                            <th scope="row" class="px-2 py-1 content-start">
+                                <textarea name="url_1" id="url_1" cols="30" rows="2"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal"
+                                    oninput="onInputChangeUrl(this)"></textarea>
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start w-64">
+                                <input type="text" name="itemname_1" id="itemname_1"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start w-64">
+                                <input type="text" name="vendor_1" id="vendor_1"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start text-right w-24">
+                                <input type="number" name="qty_1" id="qty_1" min="0"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal text-right"
+                                    value="0" oninput="onInputChangeQty(this)">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start text-right">
+                                <input type="number" name="price_1" id="price_1" min="0"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal text-right">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start text-right">
+                                <p id="subtotal_1" class="font-normal">0</p>
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start">
+                                <textarea name="description_1" id="description_1" cols="30" rows="2"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal"></textarea>
+                            </th>
+                        </tr>
+                        <tr class="bg-white border-b">
+                            <th scope="row" class="px-2 py-1 content-start">
+                                <textarea name="url_2" id="url_2" cols="30" rows="2"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal"
+                                    oninput="onInputChangeUrl(this)"></textarea>
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start w-64">
+                                <input type="text" name="itemname_2" id="itemname_2"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start w-64">
+                                <input type="text" name="vendor_2" id="vendor_2"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start text-right w-24">
+                                <input type="number" name="qty_2" id="qty_2" min="0"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal text-right"
+                                    value="0" oninput="onInputChangeQty(this)">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start text-right">
+                                <input type="number" name="price_2" id="price_2" min="0"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal text-right">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start text-right">
+                                <p id="subtotal_2" class="font-normal">0</p>
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start">
+                                <textarea name="description_2" id="description_2" cols="30" rows="2"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal"></textarea>
+                            </th>
+                        </tr>
+                        <tr class="bg-white border-b">
+                            <th scope="row" class="px-2 py-1 content-start">
+                                <textarea name="url_3" id="url_3" cols="30" rows="2"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal"
+                                    oninput="onInputChangeUrl(this)"></textarea>
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start w-64">
+                                <input type="text" name="itemname_3" id="itemname_3"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start w-64">
+                                <input type="text" name="vendor_3" id="vendor_3"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start text-right w-24">
+                                <input type="number" name="qty_3" id="qty_3" min="0"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal text-right"
+                                    value="0" oninput="onInputChangeQty(this)">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start text-right">
+                                <input type="number" name="price_3" id="price_3" min="0"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal text-right">
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start text-right">
+                                <p id="subtotal_3" class="font-normal">0</p>
+                            </th>
+                            <th scope="row" class="px-2 py-1 content-start">
+                                <textarea name="description_3" id="description_3" cols="30" rows="2"
+                                    class="w-full rounded-md p-1 border border-gray-300 font-normal"></textarea>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
